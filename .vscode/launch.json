@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Solution",
+            "request": "launch",
+            "mainClass": "neetcode150.problems.p1.Solution",
+            "projectName": "leetcode-150"
+        },
+        {
+            "type": "java",
+            "name": "Debug current problem",
+            "request": "launch",
+            "mainClass": "${file}",
+            "projectName": "leetcode-150",
+            "console": "integratedTerminal"
+        }
+    ]
+}

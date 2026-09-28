@@ -1,0 +1,66 @@
+package neetcode150.problems.p329;
+
+import java.util.*;
+import static neetcode150.common.Util.*;
+
+/*
+ * 329. Longest Increasing Path in a Matrix  [Hard]  -  2-D Dynamic Programming
+ * https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+ *
+ * Problem:
+ *   Return the length of the longest strictly increasing path moving up/down/left/right.
+ *
+ * Example:
+ *   Input:  [[9, 9, 4], [6, 6, 8], [2, 1, 1]]
+ *   Output: 4                 (1 -> 2 -> 6 -> 9)
+ *
+ * Solution - DFS + memo:
+ *   dp[i][j] = longest increasing path starting at (i, j) = 1 + best of the neighbours whose
+ *   value is larger. Each cell is computed once. The answer is the max over all cells.
+ *   Time: O(m * n)   Space: O(m * n)
+ */
+class Solution {
+    public static void main(String[] args) {
+        print(new Solution().longestIncreasingPath(new int[][] {{9, 9, 4}, {6, 6, 8}, {2, 1, 1}})); // 4
+        print(new Solution().longestIncreasingPath(new int[][] {{3, 4, 5}, {3, 2, 6}, {2, 2, 1}})); // 4
+    }
+
+    public int longestIncreasingPath(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[][] dp = new int[m][n];
+        for (int d[] : dp) Arrays.fill(d, -1);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dp[i][j] == -1) dfs(matrix, dp, m, n, i, j, -1);
+            }
+        }
+        int max = Integer.MIN_VALUE;
+        for (int[] d : dp) {
+            for (int i : d) max = Math.max(i, max);
+        }
+        return max;
+    }
+
+    public int dfs(
+        int[][] matrix,
+        int[][] dp,
+        int m,
+        int n,
+        int i,
+        int j,
+        int parent
+    ) {
+        if (
+            i >= m || j >= n || i < 0 || j < 0 || matrix[i][j] <= parent
+        ) return 0;
+        parent = matrix[i][j];
+        if (dp[i][j] != -1) return dp[i][j];
+        int left = dfs(matrix, dp, m, n, i, j - 1, parent);
+        int right = dfs(matrix, dp, m, n, i, j + 1, parent);
+        int bottom = dfs(matrix, dp, m, n, i + 1, j, parent);
+        int top = dfs(matrix, dp, m, n, i - 1, j, parent);
+        dp[i][j] = 1 + Math.max(Math.max(left, right), Math.max(top, bottom));
+        return dp[i][j];
+    }
+}
